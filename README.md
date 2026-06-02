@@ -30,6 +30,10 @@ CFC-Email/
   Surveys/
     YYYY-MM-DD-[topic]-Survey/
       Survey.html
+
+  Source/
+    Guidelines/
+    Boilerplates/
 ```
 
 ## Folder Conventions
@@ -100,6 +104,15 @@ Before any HTML file is sent, copied into a platform, or reused for a new campai
 - Webinar dates, times, speaker names, and CE language are current.
 - The send platform will provide required unsubscribe, preference, and address footer content.
 - Any copied legacy markup is cleaned up for the current send.
+
+## Source Materials
+
+New campaign source material lives in [Source](Source). Use these files when starting a new send:
+
+- [McKnights guidelines](Source/Guidelines/McKnights.md)
+- [Boilerplate templates](Source/Boilerplates)
+
+The source templates are intentionally generic and use `{{PLACEHOLDER}}` markers for campaign-specific links, images, and copy.
 
 ## Notes
 

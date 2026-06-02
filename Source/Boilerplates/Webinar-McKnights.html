@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{{EMAIL_TITLE}}</title>
+    <style>
+      body, table, td, p, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      table, td { border-collapse: collapse; }
+      img { border: 0; display: block; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+      body { margin: 0; padding: 0; width: 100% !important; background: #c0c0c0; }
+      @media only screen and (max-width: 620px) {
+        .container { width: 100% !important; }
+        .mobile-padding { padding-left: 20px !important; padding-right: 20px !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- McKnights version: verify registration links use the approved McKnights URL and utm_source value. -->
+    <div style="display: none; max-height: 0; overflow: hidden; opacity: 0; color: transparent;">{{PREHEADER_TEXT}}</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background: #c0c0c0;">
+      <tr>
+        <td align="center">
+          <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width: 600px; background: #ffffff; border-top: 5px solid #aee2fa;">
+            <tr>
+              <td align="center" style="padding: 22px 25px;">
+                <a href="{{LANDING_PAGE_URL}}" target="_blank">
+                  <img src="{{LOGO_IMAGE_URL}}" width="300" alt="ComForConnections" style="width: 300px; max-width: 100%;" />
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="{{MCKNIGHTS_REGISTRATION_URL}}" target="_blank">
+                  <img src="{{HEADER_IMAGE_URL}}" width="600" alt="{{HEADER_IMAGE_ALT}}" style="width: 600px; max-width: 100%;" />
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td class="mobile-padding" style="padding: 28px 35px 10px 35px; font-family: Arial, Helvetica, sans-serif; color: #000000;">
+                <p style="margin: 0 0 8px 0; font-size: 15px; line-height: 22px; color: #00aeef; font-weight: bold; text-transform: uppercase;">Free Webinar</p>
+                <h1 style="margin: 0 0 12px 0; font-size: 27px; line-height: 32px; color: #414042;">{{WEBINAR_TITLE}}</h1>
+                <p style="margin: 0 0 22px 0; font-size: 18px; line-height: 27px; color: #414042;">{{WEBINAR_DATE}} | {{WEBINAR_TIME}}</p>
+                <p style="margin: 0 0 16px 0; font-size: 18px; line-height: 27px;">{{INTRO_PARAGRAPH}}</p>
+                <p style="margin: 0 0 16px 0; font-size: 18px; line-height: 27px;">{{DETAIL_PARAGRAPH}}</p>
+              </td>
+            </tr>
+            <tr>
+              <td class="mobile-padding" style="padding: 10px 35px 24px 35px; font-family: Arial, Helvetica, sans-serif; color: #000000;">
+                <h2 style="margin: 0 0 10px 0; font-size: 21px; line-height: 26px; color: #00aeef;">Learning Objectives</h2>
+                <ul style="margin: 0; padding-left: 22px; font-size: 18px; line-height: 27px;">
+                  <li>{{LEARNING_OBJECTIVE_1}}</li>
+                  <li>{{LEARNING_OBJECTIVE_2}}</li>
+                  <li>{{LEARNING_OBJECTIVE_3}}</li>
+                </ul>
+              </td>
+            </tr>
+            <tr>
+              <td style="background: #00aeef; color: #ffffff; padding: 9px 25px; text-align: center; font-family: Arial, Helvetica, sans-serif; font-size: 22px; line-height: 26px; font-weight: bold; text-transform: uppercase;">Panelists</td>
+            </tr>
+            <tr>
+              <td style="background: #e4f5fd; padding: 10px;">
+                <a href="{{MCKNIGHTS_REGISTRATION_URL}}" target="_blank">
+                  <img src="{{PANELIST_IMAGE_URL}}" width="580" alt="{{PANELIST_IMAGE_ALT}}" style="width: 580px; max-width: 100%;" />
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="background: #e4f5fd; padding: 20px 25px 28px 25px;">
+                <a href="{{MCKNIGHTS_REGISTRATION_URL}}" target="_blank" style="display: inline-block; background: #00aeef; color: #ffffff; font-family: Arial, Helvetica, sans-serif; font-size: 18px; line-height: 22px; font-weight: bold; text-decoration: none; padding: 13px 28px; border-radius: 3px;">Register Now</a>
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="background: #414042; padding: 24px 25px;">
+                <a href="{{LANDING_PAGE_URL}}" target="_blank">
+                  <img src="{{FOOTER_LOGO_IMAGE_URL}}" width="300" alt="ComForCare" style="width: 300px; max-width: 100%;" />
+                </a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
