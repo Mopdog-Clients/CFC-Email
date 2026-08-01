@@ -22,10 +22,14 @@ from email.policy import SMTP
 from email.utils import format_datetime, formataddr, make_msgid
 from pathlib import Path
 from typing import Iterable
+from urllib.parse import quote
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 ENV_FILE = PROJECT_ROOT / ".email-test.env"
 SES_PATH = "/v2/email/outbound-emails"
+GITHUB_CODE_BASE_URL = "https://github.com/Mopdog-Clients/CFC-Email/blob/main/"
+LIVE_PREVIEW_BASE_URL = "https://cfc-emails.mopdogdigital.com/"
+EMAIL_HOME_URL = "https://cfc-emails.mopdogdigital.com/"
 EMAIL_PATTERN = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 BODY_OPENING_TAG = re.compile(r"<body\b[^>]*>", re.IGNORECASE)
 
@@ -115,12 +119,27 @@ def reply_to_address() -> str:
     return reply_to
 
 
-def add_team_message(html: str, team_message: str) -> str:
-    """Prepend an escaped reviewer note above the campaign content."""
+def project_links(campaign_file: Path) -> tuple[str, str, str]:
+    """Build GitHub and preview links from a campaign's repository path."""
+    relative_path = quote(campaign_file.relative_to(PROJECT_ROOT).as_posix(), safe="/")
+    return (
+        GITHUB_CODE_BASE_URL + relative_path,
+        LIVE_PREVIEW_BASE_URL + relative_path,
+        EMAIL_HOME_URL,
+    )
+
+
+def add_team_message(html: str, team_message: str, campaign_file: Path) -> str:
+    """Prepend a reviewer note and project links above the campaign content."""
     note = team_message.strip()
-    if not note:
-        return html
-    note_html = html_module.escape(note).replace("\n", "<br />")
+    note_html = ""
+    if note:
+        note_html = (
+            '<div style="margin-top: 12px;">'
+            + html_module.escape(note).replace("\n", "<br />")
+            + "</div>"
+        )
+    code_url, preview_url, home_url = project_links(campaign_file)
     preface = f"""
       <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f3f4f6;">
         <tr>
@@ -129,7 +148,21 @@ def add_team_message(html: str, team_message: str) -> str:
               <tr>
                 <td style="padding: 24px 28px; color: #1f2937; font-family: Arial, sans-serif; font-size: 15px; line-height: 22px;">
                   <div style="color: #b42318; font-family: 'Courier New', Courier, monospace; font-size: 11px; font-weight: bold; letter-spacing: 1.25px; line-height: 16px; text-transform: uppercase;">Mopdog Digital - Internal Test</div>
-                  <div style="margin-top: 12px;">{note_html}</div>
+                  {note_html}
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 20px; border-top: 1px solid #d1d5db;">
+                    <tr>
+                      <td style="padding-top: 16px; color: #b42318; font-family: 'Courier New', Courier, monospace; font-size: 11px; font-weight: bold; letter-spacing: 1.25px; line-height: 16px; text-transform: uppercase;">Project Links</td>
+                    </tr>
+                    <tr>
+                      <td style="padding-top: 8px; font-size: 14px; line-height: 20px;"><a href="{html_module.escape(code_url, quote=True)}" style="color: #1f2937; text-decoration: underline;">View Code</a>: <a href="{html_module.escape(code_url, quote=True)}" style="color: #274286; text-decoration: underline;">{html_module.escape(code_url, quote=True)}</a></td>
+                    </tr>
+                    <tr>
+                      <td style="padding-top: 10px; font-size: 14px; line-height: 20px;"><a href="{html_module.escape(preview_url, quote=True)}" style="color: #1f2937; text-decoration: underline;">View a Live Preview</a>: <a href="{html_module.escape(preview_url, quote=True)}" style="color: #274286; text-decoration: underline;">{html_module.escape(preview_url, quote=True)}</a></td>
+                    </tr>
+                    <tr>
+                      <td style="padding-top: 10px; font-size: 14px; line-height: 20px;"><a href="{html_module.escape(home_url, quote=True)}" style="color: #1f2937; text-decoration: underline;">CFC Email GitHub Repo</a>: <a href="{html_module.escape(home_url, quote=True)}" style="color: #274286; text-decoration: underline;">{html_module.escape(home_url, quote=True)}</a></td>
+                    </tr>
+                  </table>
                 </td>
               </tr>
             </table>
@@ -156,6 +189,7 @@ def raw_email(
     subject: str,
     campaign_file: Path,
     team_message: str,
+    include_team_panel: bool,
 ) -> bytes:
     message = EmailMessage(policy=SMTP)
     message["Date"] = format_datetime(datetime.now(timezone.utc))
@@ -171,13 +205,30 @@ def raw_email(
         + str(campaign_file.relative_to(PROJECT_ROOT))
         + ".\n"
     )
-    if team_message.strip():
-        text_content += "\nTeam note:\n" + team_message.strip() + "\n"
+    if include_team_panel:
+        if team_message.strip():
+            text_content += "\nTeam note:\n" + team_message.strip() + "\n"
+        code_url, preview_url, home_url = project_links(campaign_file)
+        text_content += (
+            "\nProject links:\n"
+            + "Code: "
+            + code_url
+            + "\nLive preview: "
+            + preview_url
+            + "\nCFC Email home: "
+            + home_url
+            + "\n"
+        )
     text_content += (
         "\nOpen this message in an HTML-capable email client to review the campaign."
     )
     message.set_content(text_content)
-    message.add_alternative(add_team_message(html, team_message), subtype="html")
+    html_content = (
+        add_team_message(html, team_message, campaign_file)
+        if include_team_panel
+        else html
+    )
+    message.add_alternative(html_content, subtype="html")
     return message.as_bytes()
 
 
@@ -265,7 +316,8 @@ def main() -> int:
             raise ValueError("SES_TEST_FROM_EMAIL must be a valid email address.")
         recipients = recipients_for_group(args.group)
         html = campaign_file.read_text(encoding="utf-8")
-        team_message = args.message or "" if args.group == "team" else ""
+        is_team_send = args.group == "team"
+        team_message = (args.message or "") if is_team_send else ""
         message_id = send_with_ses(
             raw_email(
                 html,
@@ -276,6 +328,7 @@ def main() -> int:
                 subject_for_file(campaign_file, args.subject),
                 campaign_file,
                 team_message,
+                is_team_send,
             ),
             sender,
             recipients,

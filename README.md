@@ -120,7 +120,7 @@ This repository can send the HTML file open in VS Code as an internal Amazon SES
 
 The tasks use Python 3 and the built-in `curl` command already present on macOS; they do not install project packages. The terminal reports the SES message ID after a successful send.
 
-Set `SES_TEST_FROM_NAME` to the display name recipients should see (for example, `ComForCare Email Test`). You can also set `SES_TEST_REPLY_TO_EMAIL` if replies should go to a specific shared inbox. Team sends prompt for an optional reviewer note; it appears in a Mopdog Digital internal-test panel above the campaign HTML, followed by a 75px separation gap, and is included in the plain-text alternative.
+Set `SES_TEST_FROM_NAME` to the display name recipients should see (for example, `ComForCare Email Test`). You can also set `SES_TEST_REPLY_TO_EMAIL` if replies should go to a specific shared inbox. Team sends prompt for an optional reviewer note; it appears in a Mopdog Digital internal-test panel above the campaign HTML, followed by a 75px separation gap, and is included in the plain-text alternative. The panel also includes project-specific links to the active HTML file in GitHub, its live preview, and the CFC Email home page.
 
 The configured sender must be a verified Amazon SES address or use a verified SES domain. If the SES account is still in the SES sandbox, the test recipients must also be verified in SES.
 
