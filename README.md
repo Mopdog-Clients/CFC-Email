@@ -105,6 +105,25 @@ Before any HTML file is sent, copied into a platform, or reused for a new campai
 - The send platform will provide required unsubscribe, preference, and address footer content.
 - Any copied legacy markup is cleaned up for the current send.
 
+## Internal Test Emails in VS Code
+
+This repository can send the HTML file open in VS Code as an internal Amazon SES test email. It is intended for review before a campaign is copied into its final send platform; it does not send to campaign lists.
+
+### One-time local setup
+
+1. Open the `CFC-Email` folder itself in VS Code.
+2. Copy `.email-test.env.example` to `.email-test.env`.
+3. Add the approved AWS SES credentials, verified sender address, and the personal/team test recipients. `.email-test.env` is ignored by Git.
+4. Open a campaign `.html` file, then use **Terminal → Run Task** and select either:
+   - **CFC Email: Send active HTML to personal test inbox**
+   - **CFC Email: Send active HTML to test team**
+
+The tasks use Python 3 and the built-in `curl` command already present on macOS; they do not install project packages. The terminal reports the SES message ID after a successful send.
+
+Set `SES_TEST_FROM_NAME` to the display name recipients should see (for example, `ComForCare Email Test`). You can also set `SES_TEST_REPLY_TO_EMAIL` if replies should go to a specific shared inbox. Team sends prompt for an optional reviewer note; it appears in a Mopdog Digital internal-test panel above the campaign HTML, followed by a 75px separation gap, and is included in the plain-text alternative.
+
+The configured sender must be a verified Amazon SES address or use a verified SES domain. If the SES account is still in the SES sandbox, the test recipients must also be verified in SES.
+
 ## Source Materials
 
 New campaign source material lives in [Source](Source). Use these files when starting a new send:

@@ -1,0 +1,57 @@
+{
+  "version": "2.0.0",
+  "inputs": [
+    {
+      "id": "cfcEmailTestSubject",
+      "type": "promptString",
+      "description": "Subject line for this internal test email"
+    },
+    {
+      "id": "cfcEmailTeamMessage",
+      "type": "promptString",
+      "description": "Optional note shown above the campaign for the test team"
+    }
+  ],
+  "tasks": [
+    {
+      "label": "CFC Email: Send active HTML to personal test inbox",
+      "type": "process",
+      "command": "python3",
+      "args": [
+        "${workspaceFolder}/scripts/send_ses_test.py",
+        "${file}",
+        "--group",
+        "personal",
+        "--subject",
+        "${input:cfcEmailTestSubject}"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "label": "CFC Email: Send active HTML to test team",
+      "type": "process",
+      "command": "python3",
+      "args": [
+        "${workspaceFolder}/scripts/send_ses_test.py",
+        "${file}",
+        "--group",
+        "team",
+        "--subject",
+        "${input:cfcEmailTestSubject}",
+        "--message",
+        "${input:cfcEmailTeamMessage}"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      }
+    }
+  ]
+}
